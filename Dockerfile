@@ -11,6 +11,7 @@ RUN apt update &&\
 
 RUN apt-fast install -y --no-install-recommends build-essential curl git locales tar tzdata wget zsh &&\
     locale-gen ja_JP.UTF-8 &&\
+    locale-gen en_US.UTF-8 &&\
     apt-fast clean &&\
     rm -rf /var/lib/apt/lists/*
 
