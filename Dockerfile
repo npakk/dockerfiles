@@ -69,4 +69,4 @@ RUN git clone https://github.com/npakk/dotfiles_for_docker.git dotfiles &&\
     ln -s ~/dotfiles/.config/nvim/vim.toml ~/.config/nvim/vim.toml
 
 RUN nvim +:q
-CMD ["/bin/zsh"]
+ENTRYPOINT ["/bin/zsh"]
