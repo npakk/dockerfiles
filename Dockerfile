@@ -3,28 +3,16 @@ FROM ubuntu:24.10
 RUN sed -i.bak -r 's@http://(jp\.)?archive\.ubuntu\.com/ubuntu/?@https://ftp.udx.icscoe.jp/Linux/ubuntu/@g' /etc/apt/sources.list
 
 RUN apt-get update &&\
-    apt-get install -y --no-install-recommends software-properties-common &&\
-    add-apt-repository ppa:apt-fast/stable &&\
+    apt-get install -y --no-install-recommends build-essential ca-certificates curl git locales tar tzdata zsh &&\
+    locale-gen ja_JP.UTF-8 en_US.UTF-8 &&\
     apt-get clean &&\
-    rm -rf /var/lib/apt/lists/*
-
-RUN apt-get update &&\
-    apt-get install -y --no-install-recommends apt-fast &&\
-    apt-fast update &&\
-    apt-get clean &&\
-    rm -rf /var/lib/apt/lists/*
-
-RUN apt-fast install -y --no-install-recommends build-essential curl git locales tar tzdata wget zsh &&\
-    locale-gen ja_JP.UTF-8 &&\
-    locale-gen en_US.UTF-8 &&\
-    apt-fast clean &&\
     rm -rf /var/lib/apt/lists/*
 
 ENV TZ=Asia/Tokyo
 ENV LANG=ja_JP.UTF-8
 ENV LANGUAGE=ja_JP:ja
 ENV LC_ALL=ja_JP.UTF-8
-ENV SHELL=/usr/bin/zsh
+ENV SHELL=/bin/zsh
 
 ARG CONTAINER_USER=user
 RUN useradd -ms /bin/zsh $CONTAINER_USER &&\
@@ -33,7 +21,7 @@ RUN useradd -ms /bin/zsh $CONTAINER_USER &&\
     /home/$CONTAINER_USER/.profile
 
 # nvim
-RUN wget https://github.com/neovim/neovim/releases/download/nightly/nvim-linux64.tar.gz &&\
+RUN curl -LO https://github.com/neovim/neovim/releases/download/nightly/nvim-linux64.tar.gz &&\
     tar -zxvf nvim-linux64.tar.gz &&\
     mv nvim-linux64/bin/nvim usr/bin/nvim &&\
     mv nvim-linux64/lib/nvim usr/lib/nvim &&\
