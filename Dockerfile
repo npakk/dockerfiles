@@ -12,10 +12,10 @@ ENV TZ=Asia/Tokyo
 ENV LANG=ja_JP.UTF-8
 ENV LANGUAGE=ja_JP:ja
 ENV LC_ALL=ja_JP.UTF-8
-ENV SHELL=/bin/zsh
+ENV SHELL=/usr/bin/zsh
 
 ARG CONTAINER_USER=user
-RUN useradd -ms /bin/zsh $CONTAINER_USER &&\
+RUN useradd -ms /usr/bin/zsh $CONTAINER_USER &&\
     rm /home/$CONTAINER_USER/.bash_logout \
     /home/$CONTAINER_USER/.bashrc \
     /home/$CONTAINER_USER/.profile
@@ -61,5 +61,4 @@ RUN git clone https://github.com/npakk/dotfiles_for_docker.git dotfiles &&\
     ln -s ~/dotfiles/.config/nvim/selene.toml ~/.config/nvim/selene.toml &&\
     ln -s ~/dotfiles/.config/nvim/vim.toml ~/.config/nvim/vim.toml
 
-RUN nvim +:q
-ENTRYPOINT ["/bin/zsh"]
+ENTRYPOINT ["/usr/bin/zsh"]
