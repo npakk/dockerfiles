@@ -1,13 +1,18 @@
-FROM ubuntu:latest
+FROM ubuntu:24.10
 
 RUN sed -i.bak -r 's@http://(jp\.)?archive\.ubuntu\.com/ubuntu/?@https://ftp.udx.icscoe.jp/Linux/ubuntu/@g' /etc/apt/sources.list
 
-RUN apt update &&\
-    apt install -y --no-install-recommends software-properties-common &&\
+RUN apt-get update &&\
+    apt-get install -y --no-install-recommends software-properties-common &&\
     add-apt-repository ppa:apt-fast/stable &&\
-    apt update &&\
-    apt install -y --no-install-recommends apt-fast &&\
-    apt-fast update
+    apt-get clean &&\
+    rm -rf /var/lib/apt/lists/*
+
+RUN apt-get update &&\
+    apt-get install -y --no-install-recommends apt-fast &&\
+    apt-fast update &&\
+    apt-get clean &&\
+    rm -rf /var/lib/apt/lists/*
 
 RUN apt-fast install -y --no-install-recommends build-essential curl git locales tar tzdata wget zsh &&\
     locale-gen ja_JP.UTF-8 &&\
