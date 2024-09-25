@@ -32,13 +32,32 @@ RUN curl -LO https://github.com/neovim/neovim/releases/download/nightly/nvim-lin
 # Homebrew
 ENV PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:$PATH"
 RUN /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" &&\
-    mkdir -p /home/linuxbrew/.linuxbrew/var/run &&\
-    chown -R $CONTAINER_USER /home/linuxbrew/.linuxbrew
+    # mkdir -p /home/linuxbrew/.linuxbrew/var/run &&\
+    # chown -R $CONTAINER_USER /home/linuxbrew/.linuxbrew
+    chown -R $CONTAINER_USER /home/linuxbrew/.linuxbrew/Cellar \
+    /home/linuxbrew/.linuxbrew/Homebrew \
+    /home/linuxbrew/.linuxbrew/bin \
+    /home/linuxbrew/.linuxbrew/sbin \
+    /home/linuxbrew/.linuxbrew/etc \
+    /home/linuxbrew/.linuxbrew/etc/bash_completion.d \
+    /home/linuxbrew/.linuxbrew/include \
+    /home/linuxbrew/.linuxbrew/lib \
+    /home/linuxbrew/.linuxbrew/opt \
+    /home/linuxbrew/.linuxbrew/share \
+    /home/linuxbrew/.linuxbrew/share/doc \
+    /home/linuxbrew/.linuxbrew/share/man \
+    /home/linuxbrew/.linuxbrew/share/man/man1 \
+    /home/linuxbrew/.linuxbrew/share/zsh \
+    /home/linuxbrew/.linuxbrew/share/zsh/site-functions \
+    /home/linuxbrew/.linuxbrew/var/homebrew/linked \
+    /home/linuxbrew/.linuxbrew/var/homebrew/locks &&\
+    chmod -R go-w /home/linuxbrew/.linuxbrew/share
 
 USER $CONTAINER_USER
 WORKDIR /home/$CONTAINER_USER/
 
 RUN git clone https://github.com/npakk/dotfiles_for_docker.git dotfiles &&\
+    mkdir -p ~/.cache/zsh &&\
     ln -s ~/dotfiles/.zshenv ~/.zshenv &&\
     ln -s ~/dotfiles/.gitconfig ~/.gitconfig &&\
     ln -s ~/dotfiles/.config ~/.config
