@@ -39,7 +39,6 @@ USER $CONTAINER_USER
 WORKDIR /home/$CONTAINER_USER/
 
 RUN git clone https://github.com/npakk/dotfiles_for_docker.git dotfiles &&\
-    mkdir -p ~/.cache/zsh &&\
     ln -s ~/dotfiles/.zshenv ~/.zshenv &&\
     ln -s ~/dotfiles/.gitconfig ~/.gitconfig &&\
     ln -s ~/dotfiles/.config ~/.config
