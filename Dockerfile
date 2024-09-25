@@ -3,7 +3,7 @@ FROM ubuntu:24.10
 RUN sed -i.bak -r 's@http://(jp\.)?archive\.ubuntu\.com/ubuntu/?@https://ftp.udx.icscoe.jp/Linux/ubuntu/@g' /etc/apt/sources.list
 
 RUN apt-get update &&\
-    apt-get install -y --no-install-recommends build-essential ca-certificates curl git locales tar tzdata zsh &&\
+    apt-get install -y --no-install-recommends build-essential ca-certificates curl git locales lua5.1 luarocks tar tzdata zsh &&\
     locale-gen ja_JP.UTF-8 en_US.UTF-8 &&\
     apt-get clean &&\
     rm -rf /var/lib/apt/lists/*
