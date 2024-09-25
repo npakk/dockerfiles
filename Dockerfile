@@ -32,8 +32,6 @@ RUN curl -LO https://github.com/neovim/neovim/releases/download/nightly/nvim-lin
 # Homebrew
 ENV PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:$PATH"
 RUN /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" &&\
-    # mkdir -p /home/linuxbrew/.linuxbrew/var/run &&\
-    # chown -R $CONTAINER_USER /home/linuxbrew/.linuxbrew
     chown -R $CONTAINER_USER /home/linuxbrew/.linuxbrew/Cellar \
     /home/linuxbrew/.linuxbrew/Homebrew \
     /home/linuxbrew/.linuxbrew/bin \
