@@ -17,9 +17,9 @@ ENV LC_ALL=ja_JP.UTF-8
 ENV SHELL=/usr/bin/zsh
 
 ARG USR=user
-ARG PW
+ARG PWD
 RUN useradd -ms /usr/bin/zsh -G sudo $USR &&\
-    echo $USR:$PW | chpasswd &&\
+    echo $USR:$PWD | chpasswd &&\
     echo "$USR ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 # nvim
