@@ -20,7 +20,10 @@ ARG USR=user
 ARG PWD
 RUN useradd -ms /usr/bin/zsh -G sudo $USR &&\
     echo $USR:$PWD | chpasswd &&\
-    echo "$USR ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+    echo "$USR ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers &&\
+    rm /home/$USR/.bash_logout \
+    /home/$USR/.bashrc \
+    /home/$USR/.profile
 
 # nvim
 RUN curl -LO https://github.com/neovim/neovim/releases/download/nightly/nvim-linux64.tar.gz &&\
@@ -34,17 +37,16 @@ RUN curl -LO https://github.com/neovim/neovim/releases/download/nightly/nvim-lin
 # Homebrew
 ENV PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:$PATH"
 USER $USR
-RUN /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+RUN /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" &&\
+    /home/$USR/.sudo_as_admin_successful
 
 WORKDIR /home/$USR/
 RUN git clone https://github.com/npakk/dotfiles_for_docker.git dotfiles &&\
     mkdir -p ~/.cache/zsh &&\
     ln -s ~/dotfiles/.zshenv ~/.zshenv &&\
     ln -s ~/dotfiles/.gitconfig ~/.gitconfig &&\
-    ln -s ~/dotfiles/.config ~/.config &&\
-    rm /home/$USR/.bash_logout \
-    /home/$USR/.bashrc \
-    /home/$USR/.profile \
-    /home/$USR/.sudo_as_admin_successful
+    ln -s ~/dotfiles/.config ~/.config
+
+RUN nvim +:q
 
 ENTRYPOINT ["/usr/bin/zsh"]
