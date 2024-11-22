@@ -20,10 +20,7 @@ ARG USR=user
 ARG PW
 RUN useradd -ms /usr/bin/zsh -G sudo $USR &&\
     echo $USR:$PW | chpasswd &&\
-    echo "$USR ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers &&\
-    rm /home/$USR/.bash_logout \
-    /home/$USR/.bashrc \
-    /home/$USR/.profile
+    echo "$USR ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 # nvim
 RUN curl -LO https://github.com/neovim/neovim/releases/download/nightly/nvim-linux64.tar.gz &&\
@@ -44,6 +41,10 @@ RUN git clone https://github.com/npakk/dotfiles_for_docker.git dotfiles &&\
     mkdir -p ~/.cache/zsh &&\
     ln -s ~/dotfiles/.zshenv ~/.zshenv &&\
     ln -s ~/dotfiles/.gitconfig ~/.gitconfig &&\
-    ln -s ~/dotfiles/.config ~/.config
+    ln -s ~/dotfiles/.config ~/.config &&\
+    rm /home/$USR/.bash_logout \
+    /home/$USR/.bashrc \
+    /home/$USR/.profile \
+    /home/$USR/.sudo_as_admin_successful
 
 ENTRYPOINT ["/usr/bin/zsh"]
