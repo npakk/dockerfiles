@@ -31,4 +31,4 @@ jobs:
         file: ./base/Dockerfile
         cache-to: type=local,dest=/tmp/docker-cache
         build-args: |
-          PWD=${{ secrets.PWD }}
+          PW=${{ secrets.PW }}
