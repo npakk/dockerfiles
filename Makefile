@@ -2,7 +2,8 @@
 all: build run
 
 build: Dockerfile
-	@docker build --no-cache -t dotfiles .
+	@read -p "ENTER DOCKER USER PASSWORD: " PW; \
+	(docker buildx build --no-cache --build-arg PW="$$PW" -t dotfiles .)
 
 run: 
 	@docker run -it dotfiles:latest
