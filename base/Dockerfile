@@ -38,7 +38,7 @@ RUN curl -LO https://github.com/neovim/neovim/releases/download/nightly/nvim-lin
 ENV PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:$PATH"
 USER $USR
 RUN /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" &&\
-    /home/$USR/.sudo_as_admin_successful
+    rm /home/$USR/.sudo_as_admin_successful
 
 WORKDIR /home/$USR/
 RUN git clone https://github.com/npakk/dotfiles_for_docker.git dotfiles &&\
