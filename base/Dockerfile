@@ -28,9 +28,9 @@ RUN useradd -ms /usr/bin/zsh -G sudo $USR &&\
 # nvim
 RUN curl -LO https://github.com/neovim/neovim/releases/download/nightly/nvim-linux64.tar.gz &&\
     tar -zxf nvim-linux64.tar.gz &&\
-    mv nvim-linux64/bin/nvim usr/bin/nvim &&\
-    mv nvim-linux64/lib/nvim usr/lib/nvim &&\
-    mv nvim-linux64/share/nvim/ usr/share/nvim &&\
+    mv nvim-linux64/bin/nvim /usr/bin/nvim &&\
+    mv nvim-linux64/lib/nvim /usr/lib/nvim &&\
+    mv nvim-linux64/share/nvim/ /usr/share/nvim &&\
     rm -rf nvim-linux64 &&\
     rm nvim-linux64.tar.gz
 
@@ -40,13 +40,16 @@ USER $USR
 RUN /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" &&\
     rm /home/$USR/.sudo_as_admin_successful
 
+USER root
+RUN sed -i '$d' /etc/sudoers
+
+USER $USR
 WORKDIR /home/$USR/
 RUN git clone https://github.com/npakk/dotfiles_for_docker.git dotfiles &&\
     mkdir -p ~/.cache/zsh &&\
     ln -s ~/dotfiles/.zshenv ~/.zshenv &&\
     ln -s ~/dotfiles/.gitconfig ~/.gitconfig &&\
-    ln -s ~/dotfiles/.config ~/.config
-
-RUN nvim +:q
+    ln -s ~/dotfiles/.config ~/.config &&\
+    nvim +:q
 
 ENTRYPOINT ["/usr/bin/zsh"]
