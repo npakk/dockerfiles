@@ -43,6 +43,8 @@ USER root
 RUN sed -i '$d' /etc/sudoers &&\
     rm /home/$USR/.sudo_as_admin_successful
 
+ARG GIT_AUTHOR_NAME
+ARG GIT_AUTHOR_EMAIL
 USER $USR
 WORKDIR /home/$USR/
 RUN git clone https://github.com/npakk/dotfiles_for_docker.git dotfiles &&\
@@ -52,7 +54,7 @@ RUN git clone https://github.com/npakk/dotfiles_for_docker.git dotfiles &&\
     ln -s ~/dotfiles/.config ~/.config &&\
     rm ~/.config/zsh/.zcompdump &&\
     chmod +x ./scripts/gitconfig.local.sh &&\
-    ./scripts/gitconfig.local.sh &&\
+    ./scripts/gitconfig.local.sh $GIT_AUTHOR_NAME $GIT_AUTHOR_EMAIL &&\
     brew bundle --file ./dotfiles/Brewfile &&\
     nvim +:q
 
