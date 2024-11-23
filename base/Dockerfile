@@ -52,10 +52,9 @@ RUN git clone https://github.com/npakk/dotfiles_for_docker.git dotfiles &&\
     ln -s ~/dotfiles/.zshenv ~/.zshenv &&\
     ln -s ~/dotfiles/.gitconfig ~/.gitconfig &&\
     ln -s ~/dotfiles/.config ~/.config &&\
-    chmod +x ./scripts/gitconfig.local.sh &&\
-    ./scripts/gitconfig.local.sh $GIT_NAME $GIT_EMAIL &&\
+    chmod +x ./dotfiles/scripts/gitconfig.local.sh &&\
+    ./dotfiles/scripts/gitconfig.local.sh $GIT_NAME $GIT_EMAIL &&\
     brew bundle --file ./dotfiles/Brewfile &&\
-    rm ~/.config/zsh/.zcompdump &&\
     nvim +:q
 
 ENTRYPOINT ["/usr/bin/zsh"]
