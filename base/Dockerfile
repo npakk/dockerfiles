@@ -43,8 +43,8 @@ USER root
 RUN sed -i '$d' /etc/sudoers &&\
     rm /home/$USR/.sudo_as_admin_successful
 
-ARG GIT_AUTHOR_NAME
-ARG GIT_AUTHOR_EMAIL
+ARG GIT_NAME
+ARG GIT_EMAIL
 USER $USR
 WORKDIR /home/$USR/
 RUN git clone https://github.com/npakk/dotfiles_for_docker.git dotfiles &&\
@@ -52,10 +52,10 @@ RUN git clone https://github.com/npakk/dotfiles_for_docker.git dotfiles &&\
     ln -s ~/dotfiles/.zshenv ~/.zshenv &&\
     ln -s ~/dotfiles/.gitconfig ~/.gitconfig &&\
     ln -s ~/dotfiles/.config ~/.config &&\
-    rm ~/.config/zsh/.zcompdump &&\
     chmod +x ./scripts/gitconfig.local.sh &&\
-    ./scripts/gitconfig.local.sh $GIT_AUTHOR_NAME $GIT_AUTHOR_EMAIL &&\
+    ./scripts/gitconfig.local.sh $GIT_NAME $GIT_EMAIL &&\
     brew bundle --file ./dotfiles/Brewfile &&\
+    rm ~/.config/zsh/.zcompdump &&\
     nvim +:q
 
 ENTRYPOINT ["/usr/bin/zsh"]
