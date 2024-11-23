@@ -32,3 +32,5 @@ jobs:
         cache-to: type=local,dest=/tmp/docker-cache
         build-args: |
           PW=${{ secrets.PW }}
+          GIT_NAME=${{ secrets.GIT_NAME }}
+          GIT_EMAIL=${{ secrets.GIT_EMAIL }}
