@@ -37,11 +37,11 @@ RUN curl -LO https://github.com/neovim/neovim/releases/download/nightly/nvim-lin
 # Homebrew
 ENV PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:$PATH"
 USER $USR
-RUN /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" &&\
-    rm /home/$USR/.sudo_as_admin_successful
+RUN /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
 USER root
-RUN sed -i '$d' /etc/sudoers
+RUN sed -i '$d' /etc/sudoers &&\
+    rm /home/$USR/.sudo_as_admin_successful
 
 USER $USR
 WORKDIR /home/$USR/
@@ -50,6 +50,10 @@ RUN git clone https://github.com/npakk/dotfiles_for_docker.git dotfiles &&\
     ln -s ~/dotfiles/.zshenv ~/.zshenv &&\
     ln -s ~/dotfiles/.gitconfig ~/.gitconfig &&\
     ln -s ~/dotfiles/.config ~/.config &&\
+    rm ~/.config/zsh/.zcompdump &&\
+    chmod +x ./scripts/gitconfig.local.sh &&\
+    ./scripts/gitconfig.local.sh &&\
+    brew bundle --file ./dotfiles/Brewfile &&\
     nvim +:q
 
 ENTRYPOINT ["/usr/bin/zsh"]
