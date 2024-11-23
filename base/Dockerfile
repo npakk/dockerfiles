@@ -10,6 +10,15 @@ RUN sed -i.bak -r 's@http://(jp\.)?archive\.ubuntu\.com/ubuntu/?@https://ftp.udx
     apt-get clean &&\
     rm -rf /var/lib/apt/lists/*
 
+# nvim
+RUN curl -LO https://github.com/neovim/neovim/releases/download/nightly/nvim-linux64.tar.gz &&\
+    tar -zxf nvim-linux64.tar.gz &&\
+    mv nvim-linux64/bin/nvim /usr/bin/nvim &&\
+    mv nvim-linux64/lib/nvim /usr/lib/nvim &&\
+    mv nvim-linux64/share/nvim/ /usr/share/nvim &&\
+    rm -rf nvim-linux64 &&\
+    rm nvim-linux64.tar.gz
+
 ENV TZ=Asia/Tokyo
 ENV LANG=ja_JP.UTF-8
 ENV LANGUAGE=ja_JP:ja
@@ -24,15 +33,6 @@ RUN useradd -ms /usr/bin/zsh -G sudo $USR &&\
     rm /home/$USR/.bash_logout \
     /home/$USR/.bashrc \
     /home/$USR/.profile
-
-# nvim
-RUN curl -LO https://github.com/neovim/neovim/releases/download/nightly/nvim-linux64.tar.gz &&\
-    tar -zxf nvim-linux64.tar.gz &&\
-    mv nvim-linux64/bin/nvim /usr/bin/nvim &&\
-    mv nvim-linux64/lib/nvim /usr/lib/nvim &&\
-    mv nvim-linux64/share/nvim/ /usr/share/nvim &&\
-    rm -rf nvim-linux64 &&\
-    rm nvim-linux64.tar.gz
 
 # Homebrew
 ENV PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:$PATH"
