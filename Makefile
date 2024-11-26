@@ -10,7 +10,7 @@ build:
 	(docker buildx build --no-cache --platform linux/amd64 --build-arg PW="$$PW" --build-arg GIT_NAME="$$GIT_NAME" --build-arg GIT_EMAIL="$$GIT_EMAIL" -t dotfiles "$$BUILD"/)
 
 run:
-	@docker run --platform linux/amd64 -it dotfiles:latest
+	@docker run --platform linux/amd64 -it dotfiles:latest tmux
 
 .PHONY: clean
 clean:

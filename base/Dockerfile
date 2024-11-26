@@ -7,7 +7,7 @@ ENV TZ=Asia/Tokyo LANG=ja_JP.UTF-8 LANGUAGE=ja_JP:ja LC_ALL=ja_JP.UTF-8 SHELL=/u
 RUN sed -i.bak -r 's@http://(jp\.)?archive\.ubuntu\.com/ubuntu/?@https://ftp.udx.icscoe.jp/Linux/ubuntu/@g' /etc/apt/sources.list &&\
     apt-get update &&\
     apt-get install -y --no-install-recommends \
-    build-essential ca-certificates curl git locales lua5.1 luarocks sudo tzdata zsh &&\
+    build-essential ca-certificates curl git jq locales lua5.1 luarocks sudo tzdata zsh &&\
     locale-gen ja_JP.UTF-8 en_US.UTF-8 &&\
     curl -fsSL https://deb.nodesource.com/setup_22.x | bash - &&\
     apt-get install -y --no-install-recommends nodejs &&\
@@ -32,6 +32,7 @@ USER $USR
 WORKDIR /home/$USR/
 RUN /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" &&\
     git clone https://github.com/npakk/dotfiles_for_docker.git dotfiles &&\
+    git clone https://github.com/tmux-plugins/tpm /home/$USR/.local/share/tmux/plugins/tpm &&\
     mkdir -p ~/.cache/zsh &&\
     ln -s ~/dotfiles/.zshenv ~/.zshenv &&\
     ln -s ~/dotfiles/.gitconfig ~/.gitconfig &&\
@@ -46,4 +47,3 @@ RUN sed -i '$d' /etc/sudoers &&\
     rm /home/$USR/.sudo_as_admin_successful
 
 USER $USR
-ENTRYPOINT ["/usr/bin/zsh"]
