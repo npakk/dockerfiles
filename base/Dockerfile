@@ -44,7 +44,6 @@ RUN /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/instal
 
 USER root
 RUN sed -i '$d' /etc/sudoers &&\
-    rm /home/$USR/.sudo_as_admin_successful \
-    /home/$USR/.config/zsh/.zcompdump
+    rm /home/$USR/.sudo_as_admin_successful
 
 USER $USR
