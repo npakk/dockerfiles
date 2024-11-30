@@ -32,3 +32,14 @@ jobs:
         build-args: |
           GIT_NAME=${{ secrets.GIT_NAME }}
           GIT_EMAIL=${{ secrets.GIT_EMAIL }}
+
+    - name: Build and push for dotfiles image
+      uses: docker/build-push-action@v6
+      with:
+        push: true
+        tags: npakk/dotfiles:dotfiles
+        file: ./dotfiles/Dockerfile
+        cache-from: type=local,src=/tmp/docker-cache
+        build-args: |
+          GIT_NAME=${{ secrets.GIT_NAME }}
+          GIT_EMAIL=${{ secrets.GIT_EMAIL }}
