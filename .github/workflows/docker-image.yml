@@ -28,6 +28,9 @@ jobs:
         push: true
         tags: npakk/dotfiles:base
         file: ./base/Dockerfile
+        platforms:
+          - linux/amd64
+          - linux/arm64
         cache-to: type=local,dest=/tmp/docker-cache
         build-args: |
           GIT_NAME=${{ secrets.GIT_NAME }}
@@ -39,6 +42,9 @@ jobs:
         push: true
         tags: npakk/dotfiles:dotfiles
         file: ./dotfiles/Dockerfile
+        platforms:
+          - linux/amd64
+          - linux/arm64
         cache-from: type=local,src=/tmp/docker-cache
         build-args: |
           GIT_NAME=${{ secrets.GIT_NAME }}
