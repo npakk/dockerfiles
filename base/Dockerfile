@@ -130,7 +130,8 @@ WORKDIR /home/${USR}/
 RUN git clone https://github.com/rupa/z.git /home/${USR}/.local/share/z/path/to/ --depth 1 &&\
     git clone https://github.com/zsh-users/zsh-autosuggestions /home/${USR}/.local/share/zsh/zsh-autosuggestions --depth 1 &&\
     git clone https://github.com/zsh-users/zsh-completions.git /home/${USR}/.local/share/zsh/zsh-completions --depth 1 &&\
-    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git /home/${USR}/.local/share/zsh/zsh-syntax-highlighting --depth 1
+    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git /home/${USR}/.local/share/zsh/zsh-syntax-highlighting --depth 1 &&\
+    git clone https://github.com/gkeep/iceberg-dark.git /home/${USR}/.local/share/tmux/iceberg-dark --depth 1
 
 RUN git clone https://github.com/npakk/dotfiles_for_docker.git dotfiles &&\
     mkdir -p /home/${USR}/.cache/zsh \
