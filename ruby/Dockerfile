@@ -106,7 +106,7 @@ ENV TZ=Asia/Tokyo LANG=ja_JP.UTF-8 LANGUAGE=ja_JP:ja LC_ALL=ja_JP.UTF-8 SHELL=/u
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential git jq locales lua5.1 luarocks libevent-dev tzdata zsh \
-    libffi-dev libyaml-dev libz-dev &&\ # for rbenv
+    libffi-dev libyaml-dev libz-dev &&\
     locale-gen ja_JP.UTF-8 en_US.UTF-8 &&\
     apt-get clean &&\
     rm -rf /var/lib/apt/lists/*
@@ -134,7 +134,11 @@ RUN git clone https://github.com/rupa/z.git /home/${USR}/.local/share/z/path/to/
     git clone https://github.com/zsh-users/zsh-syntax-highlighting.git /home/${USR}/.local/share/zsh/zsh-syntax-highlighting --depth 1 &&\
     git clone https://github.com/gkeep/iceberg-dark.git /home/${USR}/.local/share/tmux/iceberg-dark --depth 1 &&\
     git clone https://github.com/rbenv/rbenv.git /home/${USR}/.rbenv --depth 1 &&\
-    git clone https://github.com/rbenv/ruby-build.git /home/${USR}/.rbenv/plugins/ruby-build --depth 1
+    git clone https://github.com/rbenv/ruby-build.git /home/${USR}/.rbenv/plugins/ruby-build --depth 1 &&\
+    apt-get update && apt-get install -y --no-install-recommends \
+    libffi-dev libyaml-dev libz-dev &&\
+    apt-get clean &&\
+    rm -rf /var/lib/apt/lists/*
 
 RUN git clone https://github.com/npakk/dotfiles_for_docker.git dotfiles &&\
     mkdir -p /home/${USR}/.cache/zsh \
