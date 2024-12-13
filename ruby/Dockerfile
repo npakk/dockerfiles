@@ -32,16 +32,6 @@ FROM node:22-slim AS builder-node
 RUN npm install -g git-cz
 RUN npm install -g neovim
 
-FROM base AS builder-selene
-
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential &&\
-    apt-get clean &&\
-    rm -rf /var/lib/apt/lists/*
-
-RUN curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain stable &&\
-    /root/.cargo/bin/cargo install selene
-
 FROM base AS my-amd64
 RUN mkdir /tmp/packages && cd /tmp/packages &&\
     curl -LO https://github.com/sharkdp/bat/releases/download/v${BAT}/bat-v${BAT}-x86_64-unknown-linux-gnu.tar.gz &&\
@@ -115,7 +105,8 @@ FROM my-${TARGETARCH}
 ENV TZ=Asia/Tokyo LANG=ja_JP.UTF-8 LANGUAGE=ja_JP:ja LC_ALL=ja_JP.UTF-8 SHELL=/usr/bin/zsh
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential git jq locales lua5.1 luarocks libevent-dev tzdata zsh &&\
+    build-essential git jq locales lua5.1 luarocks libevent-dev tzdata zsh \
+    rubygems ruby-dev && gem install rubocop &&\
     locale-gen ja_JP.UTF-8 en_US.UTF-8 &&\
     apt-get clean &&\
     rm -rf /var/lib/apt/lists/*
@@ -133,7 +124,6 @@ COPY --from=builder-tmux /usr/local/bin/tmux /usr/local/bin/tmux
 COPY --from=builder-neovim /usr/local/bin/nvim /usr/local/bin/nvim
 COPY --from=builder-neovim /usr/local/lib/nvim /usr/local/lib/nvim
 COPY --from=builder-neovim /usr/local/share/nvim /usr/local/share/nvim
-COPY --from=builder-selene /root/.cargo/bin/selene /usr/local/bin/selene
 
 USER ${USR}
 WORKDIR /home/${USR}/
@@ -154,7 +144,3 @@ RUN git clone https://github.com/npakk/dotfiles_for_docker.git dotfiles &&\
     chmod +x /home/${USR}/dotfiles/scripts/gitconfig.local.sh &&\
     /home/${USR}/dotfiles/scripts/gitconfig.local.sh ${GIT_NAME} ${GIT_EMAIL} &&\
     nvim +:q
-
-RUN mkdir -p /home/${USR}/.local/share/nvim/mason/bin/ \
-    /home/${USR}/.local/share/nvim/mason/packages/selene &&\
-    ln -s /usr/local/bin/selene /home/${USR}/.local/share/nvim/mason/bin/selene
