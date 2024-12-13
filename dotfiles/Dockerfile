@@ -1,11 +1,10 @@
 FROM ubuntu:24.10 AS base
 ARG TARGETARCH
-ARG BAT=0.24.0 DELTA=0.18.2 EZA=0.20.9 FD=10.2.0 FZF=0.56.3 GH=2.63.0 GHQ=1.7.1 LAZYGIT=0.44.1 RG=14.1.1 STARSHIP=1.21.1
+ARG BAT=0.24.0 DELTA=0.18.2 EZA=0.20.12 FD=10.2.0 FZF=0.56.3 GH=2.63.2 GHQ=1.7.1 LAZYGIT=0.44.1 RG=14.1.1 STARSHIP=1.21.1
 
 RUN sed -i.bak -r 's@http://(jp\.)?archive\.ubuntu\.com/ubuntu/?@https://ftp.udx.icscoe.jp/Linux/ubuntu/@g' /etc/apt/sources.list &&\
     apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates curl unzip
-
 
 FROM base AS builder-tmux
 
@@ -31,6 +30,7 @@ RUN git clone https://github.com/neovim/neovim.git -b nightly --depth 1 &&\
 FROM node:22-slim AS builder-node
 
 RUN npm install -g git-cz
+RUN npm install -g neovim
 
 FROM base AS builder-selene
 
@@ -138,10 +138,10 @@ COPY --from=builder-selene /root/.cargo/bin/selene /usr/local/bin/selene
 USER ${USR}
 WORKDIR /home/${USR}/
 
-RUN git clone https://github.com/rupa/z.git /home/${USR}/.local/share/z/path/to/ &&\
-    git clone https://github.com/zsh-users/zsh-autosuggestions /home/${USR}/.local/share/zsh/zsh-autosuggestions &&\
-    git clone https://github.com/zsh-users/zsh-completions.git /home/${USR}/.local/share/zsh/zsh-completions &&\
-    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git /home/${USR}/.local/share/zsh/zsh-syntax-highlighting
+RUN git clone https://github.com/rupa/z.git /home/${USR}/.local/share/z/path/to/ --depth 1 &&\
+    git clone https://github.com/zsh-users/zsh-autosuggestions /home/${USR}/.local/share/zsh/zsh-autosuggestions --depth 1 &&\
+    git clone https://github.com/zsh-users/zsh-completions.git /home/${USR}/.local/share/zsh/zsh-completions --depth 1 &&\
+    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git /home/${USR}/.local/share/zsh/zsh-syntax-highlighting --depth 1
 
 RUN git clone https://github.com/npakk/dotfiles_for_docker.git dotfiles &&\
     mkdir -p /home/${USR}/.cache/zsh \
@@ -153,6 +153,6 @@ RUN git clone https://github.com/npakk/dotfiles_for_docker.git dotfiles &&\
     chmod +x /home/${USR}/dotfiles/scripts/gitconfig.local.sh &&\
     /home/${USR}/dotfiles/scripts/gitconfig.local.sh ${GIT_NAME} ${GIT_EMAIL} &&\
     nvim +:q &&\
-    mkdir -p /home/${USR}/.local/share/nvim/mason/packages/selene \
-    /home/${USR}/.local/share/nvim/mason/bin/ &&\
+    mkdir -p /home/${USR}/.local/share/nvim/mason/bin/ \
+    /home/${USR}/.local/share/nvim/mason/packages/selene &&\
     ln -s /usr/local/bin/selene /home/${USR}/.local/share/nvim/mason/bin/selene
