@@ -4,12 +4,12 @@ ARG BAT=0.24.0 DELTA=0.18.2 EZA=0.20.12 FD=10.2.0 FZF=0.56.3 GH=2.63.2 GHQ=1.7.1
 
 RUN sed -i.bak -r 's@http://(jp\.)?archive\.ubuntu\.com/ubuntu/?@https://ftp.udx.icscoe.jp/Linux/ubuntu/@g' /etc/apt/sources.list &&\
     apt-get update && apt-get install -y --no-install-recommends \
-    ca-certificates curl unzip
+    build-essential ca-certificates curl git libevent-dev unzip
 
 FROM base AS builder-tmux
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    automake bison build-essential git libevent-dev libncurses5-dev pkg-config
+    automake bison libncurses5-dev pkg-config
 
 RUN git clone https://github.com/tmux/tmux.git -b 3.5a --depth 1 &&\
     cd tmux &&\
@@ -20,7 +20,7 @@ RUN git clone https://github.com/tmux/tmux.git -b 3.5a --depth 1 &&\
 FROM base AS builder-neovim
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential cmake gettext git
+    cmake gettext
 
 RUN git clone https://github.com/neovim/neovim.git -b nightly --depth 1 &&\
     cd neovim &&\
@@ -33,11 +33,6 @@ RUN npm install -g git-cz
 RUN npm install -g neovim
 
 FROM base AS builder-selene
-
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential &&\
-    apt-get clean &&\
-    rm -rf /var/lib/apt/lists/*
 
 RUN curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain stable &&\
     /root/.cargo/bin/cargo install selene
@@ -115,7 +110,7 @@ FROM my-${TARGETARCH}
 ENV TZ=Asia/Tokyo LANG=ja_JP.UTF-8 LANGUAGE=ja_JP:ja LC_ALL=ja_JP.UTF-8 SHELL=/usr/bin/zsh
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential git jq locales lua5.1 luarocks libevent-dev tzdata zsh &&\
+    jq locales lua5.1 luarocks tzdata zsh &&\
     locale-gen ja_JP.UTF-8 en_US.UTF-8 &&\
     apt-get clean &&\
     rm -rf /var/lib/apt/lists/*
@@ -142,7 +137,7 @@ RUN git clone https://github.com/rupa/z.git /home/${USR}/.local/share/z/path/to/
     git clone https://github.com/zsh-users/zsh-autosuggestions /home/${USR}/.local/share/zsh/zsh-autosuggestions --depth 1 &&\
     git clone https://github.com/zsh-users/zsh-completions.git /home/${USR}/.local/share/zsh/zsh-completions --depth 1 &&\
     git clone https://github.com/zsh-users/zsh-syntax-highlighting.git /home/${USR}/.local/share/zsh/zsh-syntax-highlighting --depth 1 &&\
-    git clone https://github.com/gkeep/iceberg-dark.git /home/${USR}/.local/share/tmux/iceberg-dark --depth 1
+    git clone https://github.com/gkeep/iceberg-dark.git /home/${USR}/.local/share/tmux/plugins/iceberg-dark --depth 1
 
 RUN git clone https://github.com/npakk/dotfiles_for_docker.git dotfiles &&\
     mkdir -p /home/${USR}/.cache/zsh \
@@ -152,9 +147,10 @@ RUN git clone https://github.com/npakk/dotfiles_for_docker.git dotfiles &&\
     ln -s /home/${USR}/dotfiles/.gitconfig /home/${USR}/.gitconfig &&\
     ln -s /home/${USR}/dotfiles/.config /home/${USR}/.config &&\
     chmod +x /home/${USR}/dotfiles/scripts/gitconfig.local.sh &&\
-    /home/${USR}/dotfiles/scripts/gitconfig.local.sh ${GIT_NAME} ${GIT_EMAIL} &&\
-    nvim +:q
+    /home/${USR}/dotfiles/scripts/gitconfig.local.sh ${GIT_NAME} ${GIT_EMAIL}
 
 RUN mkdir -p /home/${USR}/.local/share/nvim/mason/bin/ \
     /home/${USR}/.local/share/nvim/mason/packages/selene &&\
     ln -s /usr/local/bin/selene /home/${USR}/.local/share/nvim/mason/bin/selene
+
+RUN nvim +:q
