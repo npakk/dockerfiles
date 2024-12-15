@@ -149,8 +149,4 @@ RUN git clone https://github.com/npakk/dotfiles_for_docker.git dotfiles &&\
     chmod +x /home/${USR}/dotfiles/scripts/gitconfig.local.sh &&\
     /home/${USR}/dotfiles/scripts/gitconfig.local.sh ${GIT_NAME} ${GIT_EMAIL}
 
-RUN mkdir -p /home/${USR}/.local/share/nvim/mason/bin/ \
-    /home/${USR}/.local/share/nvim/mason/packages/selene &&\
-    ln -s /usr/local/bin/selene /home/${USR}/.local/share/nvim/mason/bin/selene
-
 RUN nvim +:q
