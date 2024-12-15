@@ -29,13 +29,12 @@ RUN git clone https://github.com/neovim/neovim.git -b nightly --depth 1 &&\
 
 FROM node:22-slim AS builder-node
 
-RUN npm install -g git-cz
-RUN npm install -g neovim
+RUN npm install -g git-cz neovim
 
-FROM base AS builder-selene
+FROM base AS builder-rust
 
 RUN curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain stable &&\
-    /root/.cargo/bin/cargo install selene
+    /root/.cargo/bin/cargo install selene stylua
 
 FROM base AS my-amd64
 RUN mkdir /tmp/packages && cd /tmp/packages &&\
@@ -128,7 +127,7 @@ COPY --from=builder-tmux /usr/local/bin/tmux /usr/local/bin/tmux
 COPY --from=builder-neovim /usr/local/bin/nvim /usr/local/bin/nvim
 COPY --from=builder-neovim /usr/local/lib/nvim /usr/local/lib/nvim
 COPY --from=builder-neovim /usr/local/share/nvim /usr/local/share/nvim
-COPY --from=builder-selene /root/.cargo/bin/selene /usr/local/bin/selene
+COPY --from=builder-rust ["/root/.cargo/bin/selene","/root/.cargo/bin/stylua","/usr/local/bin/"]
 
 USER ${USR}
 WORKDIR /home/${USR}/

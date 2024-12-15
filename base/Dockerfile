@@ -29,8 +29,7 @@ RUN git clone https://github.com/neovim/neovim.git -b nightly --depth 1 &&\
 
 FROM node:22-slim AS builder-node
 
-RUN npm install -g git-cz
-RUN npm install -g neovim
+RUN npm install -g git-cz neovim
 
 FROM base AS my-amd64
 RUN mkdir /tmp/packages && cd /tmp/packages &&\

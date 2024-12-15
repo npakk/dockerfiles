@@ -29,8 +29,7 @@ RUN git clone https://github.com/neovim/neovim.git -b nightly --depth 1 &&\
 
 FROM node:22-slim AS builder-node
 
-RUN npm install -g git-cz
-RUN npm install -g neovim
+RUN npm install -g git-cz neovim
 
 FROM base AS my-amd64
 RUN mkdir /tmp/packages && cd /tmp/packages &&\
@@ -145,15 +144,24 @@ RUN git clone https://github.com/npakk/dotfiles_for_docker.git dotfiles &&\
 
 USER root
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    libffi-dev libyaml-dev libz-dev &&\
+    rubygems ruby-dev &&\
+    gem install rubocop solargraph &&\
     apt-get clean &&\
     rm -rf /var/lib/apt/lists/*
-
 USER ${USR}
-RUN git clone https://github.com/rbenv/rbenv.git /home/${USR}/.rbenv --depth 1 &&\
-    git clone https://github.com/rbenv/ruby-build.git /home/${USR}/.rbenv/plugins/ruby-build --depth 1 &&\
-    echo 'eval "$(~/.rbenv/bin/rbenv init -)"' >> /home/${USR}/.config/zsh/.zshrc &&\
-    /home/${USR}/.rbenv/bin/rbenv install 3.3.6 &&\
-    /home/${USR}/.rbenv/bin/rbenv global 3.3.6
+
+# # rbenv
+# USER root
+# RUN apt-get update && apt-get install -y --no-install-recommends \
+#     libffi-dev libyaml-dev libz-dev &&\
+#     apt-get clean &&\
+#     rm -rf /var/lib/apt/lists/*
+#
+# USER ${USR}
+# RUN git clone https://github.com/rbenv/rbenv.git /home/${USR}/.rbenv --depth 1 &&\
+#     git clone https://github.com/rbenv/ruby-build.git /home/${USR}/.rbenv/plugins/ruby-build --depth 1 &&\
+#     echo 'eval "$(~/.rbenv/bin/rbenv init -)"' >> /home/${USR}/.config/zsh/.zshrc &&\
+#     /home/${USR}/.rbenv/bin/rbenv install 3.3.6 &&\
+#     /home/${USR}/.rbenv/bin/rbenv global 3.3.6
 
 RUN nvim +:q
