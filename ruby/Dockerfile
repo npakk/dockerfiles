@@ -109,6 +109,18 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     apt-get clean &&\
     rm -rf /var/lib/apt/lists/*
 
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    rubygems ruby-dev &&\
+    gem install rubocop solargraph &&\
+    apt-get clean &&\
+    rm -rf /var/lib/apt/lists/*
+
+# # rbenv
+# RUN apt-get update && apt-get install -y --no-install-recommends \
+#     libffi-dev libyaml-dev libz-dev &&\
+#     apt-get clean &&\
+#     rm -rf /var/lib/apt/lists/*
+
 ARG USR=user GIT_NAME GIT_EMAIL
 
 RUN useradd -ms /usr/bin/zsh ${USR} &&\
@@ -142,22 +154,7 @@ RUN git clone https://github.com/npakk/dotfiles_for_docker.git dotfiles &&\
     chmod +x /home/${USR}/dotfiles/scripts/gitconfig.local.sh &&\
     /home/${USR}/dotfiles/scripts/gitconfig.local.sh ${GIT_NAME} ${GIT_EMAIL}
 
-USER root
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    rubygems ruby-dev &&\
-    gem install rubocop solargraph &&\
-    apt-get clean &&\
-    rm -rf /var/lib/apt/lists/*
-USER ${USR}
-
 # # rbenv
-# USER root
-# RUN apt-get update && apt-get install -y --no-install-recommends \
-#     libffi-dev libyaml-dev libz-dev &&\
-#     apt-get clean &&\
-#     rm -rf /var/lib/apt/lists/*
-#
-# USER ${USR}
 # RUN git clone https://github.com/rbenv/rbenv.git /home/${USR}/.rbenv --depth 1 &&\
 #     git clone https://github.com/rbenv/ruby-build.git /home/${USR}/.rbenv/plugins/ruby-build --depth 1 &&\
 #     echo 'eval "$(~/.rbenv/bin/rbenv init -)"' >> /home/${USR}/.config/zsh/.zshrc &&\
