@@ -109,9 +109,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     apt-get clean &&\
     rm -rf /var/lib/apt/lists/*
 
+# rbenv
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    rubygems ruby-dev &&\
-    gem install debug rubocop solargraph &&\
+    libffi-dev libyaml-dev libz-dev &&\
     apt-get clean &&\
     rm -rf /var/lib/apt/lists/*
 
@@ -147,5 +147,13 @@ RUN git clone https://github.com/npakk/dotfiles_for_docker.git dotfiles &&\
     ln -s /home/${USR}/dotfiles/.config /home/${USR}/.config &&\
     chmod +x /home/${USR}/dotfiles/scripts/gitconfig.local.sh &&\
     /home/${USR}/dotfiles/scripts/gitconfig.local.sh ${GIT_NAME} ${GIT_EMAIL}
+
+# rbenv
+RUN git clone https://github.com/rbenv/rbenv.git /home/${USR}/.rbenv --depth 1 &&\
+    git clone https://github.com/rbenv/ruby-build.git /home/${USR}/.rbenv/plugins/ruby-build --depth 1 &&\
+    echo 'eval "$(~/.rbenv/bin/rbenv init -)"' >> /home/${USR}/.config/zsh/.zshrc &&\
+    /home/${USR}/.rbenv/bin/rbenv install 3.3.6 &&\
+    /home/${USR}/.rbenv/bin/rbenv global 3.3.6 &&\
+    /home/${USR}/.rbenv/shims/gem install rubocop solargraph
 
 RUN nvim +:q
