@@ -154,6 +154,6 @@ RUN git clone https://github.com/rbenv/rbenv.git /home/${USR}/.rbenv --depth 1 &
     echo 'eval "$(~/.rbenv/bin/rbenv init -)"' >> /home/${USR}/.config/zsh/.zshrc &&\
     /home/${USR}/.rbenv/bin/rbenv install 3.3.6 &&\
     /home/${USR}/.rbenv/bin/rbenv global 3.3.6 &&\
-    /home/${USR}/.rbenv/shims/gem install rubocop solargraph
+    /home/${USR}/.rbenv/shims/gem install rubocop rubocop-fjord solargraph
 
 RUN nvim +:q
