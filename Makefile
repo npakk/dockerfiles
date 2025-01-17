@@ -14,3 +14,5 @@ run:
 clean:
 	@docker rm -f `docker ps -aq`
 	@docker image prune -af
+	@docker volume prune -af
+	@docker network prune -f
