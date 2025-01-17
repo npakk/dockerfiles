@@ -30,9 +30,6 @@ jobs:
         file: ./base/Dockerfile
         platforms: linux/amd64, linux/arm64
         cache-to: type=local,dest=/tmp/docker-cache
-        build-args: |
-          GITNAME=${{ secrets.GITNAME }}
-          GITEMAIL=${{ secrets.GITEMAIL }}
 
     - name: Build and push for lua image
       uses: docker/build-push-action@v6
@@ -42,9 +39,6 @@ jobs:
         file: ./lua/Dockerfile
         platforms: linux/amd64, linux/arm64
         cache-from: type=local,src=/tmp/docker-cache
-        build-args: |
-          GITNAME=${{ secrets.GITNAME }}
-          GITEMAIL=${{ secrets.GITEMAIL }}
 
     - name: Build and push for ruby image
       uses: docker/build-push-action@v6
@@ -54,6 +48,3 @@ jobs:
         file: ./ruby/Dockerfile
         platforms: linux/amd64, linux/arm64
         cache-from: type=local,src=/tmp/docker-cache
-        build-args: |
-          GITNAME=${{ secrets.GITNAME }}
-          GITEMAIL=${{ secrets.GITEMAIL }}
