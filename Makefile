@@ -13,4 +13,4 @@ run:
 .PHONY: clean
 clean:
 	@docker rm -f `docker ps -aq`
-	@docker system prune -f --volumes
+	@docker system prune -af --volumes
