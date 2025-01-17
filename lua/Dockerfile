@@ -114,7 +114,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     apt-get clean &&\
     rm -rf /var/lib/apt/lists/*
 
-ARG UID GID USERNAME GROUPNAME GITNAME GITEMAIL
+ARG UID=9001 GID=9001 USERNAME=user GROUPNAME=user GITNAME=example GITEMAIL=example@example.com
 
 RUN groupadd -g ${GID} ${GROUPNAME} &&\ 
     useradd -ms /usr/bin/zsh -u ${UID} -g ${GID} ${USERNAME} &&\
