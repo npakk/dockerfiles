@@ -115,12 +115,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     apt-get clean &&\
     rm -rf /var/lib/apt/lists/*
 
-ARG USR=user GIT_NAME GIT_EMAIL
+ARG UID GID USERNAME GROUPNAME GITNAME GITEMAIL
 
-RUN useradd -ms /usr/bin/zsh ${USR} &&\
-    rm /home/${USR}/.bash_logout \
-    /home/${USR}/.bashrc \
-    /home/${USR}/.profile
+RUN groupadd -g ${GID} ${GROUPNAME} &&\ 
+    useradd -ms /usr/bin/zsh -u ${UID} -g ${GID} ${USERNAME} &&\
+    rm /home/${USERNAME}/.bash_logout \
+    /home/${USERNAME}/.bashrc \
+    /home/${USERNAME}/.profile
 
 COPY --from=builder-node /usr/local/bin /usr/local/bin
 COPY --from=builder-node /usr/local/lib/node_modules /usr/local/lib/node_modules
@@ -129,23 +130,23 @@ COPY --from=builder-neovim /usr/local/bin/nvim /usr/local/bin/nvim
 COPY --from=builder-neovim /usr/local/lib/nvim /usr/local/lib/nvim
 COPY --from=builder-neovim /usr/local/share/nvim /usr/local/share/nvim
 
-USER ${USR}
-WORKDIR /home/${USR}/
+USER ${USERNAME}
+WORKDIR /home/${USERNAME}/
 
-RUN git clone https://github.com/rupa/z.git /home/${USR}/.local/share/z/path/to/ --depth 1 &&\
-    git clone https://github.com/zsh-users/zsh-autosuggestions /home/${USR}/.local/share/zsh/zsh-autosuggestions --depth 1 &&\
-    git clone https://github.com/zsh-users/zsh-completions.git /home/${USR}/.local/share/zsh/zsh-completions --depth 1 &&\
-    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git /home/${USR}/.local/share/zsh/zsh-syntax-highlighting --depth 1 &&\
-    git clone https://github.com/gkeep/iceberg-dark.git /home/${USR}/.local/share/tmux/plugins/iceberg-dark --depth 1
+RUN git clone https://github.com/rupa/z.git /home/${USERNAME}/.local/share/z/path/to/ --depth 1 &&\
+    git clone https://github.com/zsh-users/zsh-autosuggestions /home/${USERNAME}/.local/share/zsh/zsh-autosuggestions --depth 1 &&\
+    git clone https://github.com/zsh-users/zsh-completions.git /home/${USERNAME}/.local/share/zsh/zsh-completions --depth 1 &&\
+    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git /home/${USERNAME}/.local/share/zsh/zsh-syntax-highlighting --depth 1 &&\
+    git clone https://github.com/gkeep/iceberg-dark.git /home/${USERNAME}/.local/share/tmux/plugins/iceberg-dark --depth 1
 
 RUN git clone https://github.com/npakk/dotfiles_for_docker.git dotfiles &&\
-    mkdir -p /home/${USR}/.cache/zsh \
-    /home/${USR}/.local/state/zsh \
-    /home/${USR}/.local/share/zsh/completions &&\
-    ln -s /home/${USR}/dotfiles/.zshenv /home/${USR}/.zshenv &&\
-    ln -s /home/${USR}/dotfiles/.gitconfig /home/${USR}/.gitconfig &&\
-    ln -s /home/${USR}/dotfiles/.config /home/${USR}/.config &&\
-    chmod +x /home/${USR}/dotfiles/scripts/gitconfig.local.sh &&\
-    /home/${USR}/dotfiles/scripts/gitconfig.local.sh ${GIT_NAME} ${GIT_EMAIL}
+    mkdir -p /home/${USERNAME}/.cache/zsh \
+    /home/${USERNAME}/.local/state/zsh \
+    /home/${USERNAME}/.local/share/zsh/completions &&\
+    ln -s /home/${USERNAME}/dotfiles/.zshenv /home/${USERNAME}/.zshenv &&\
+    ln -s /home/${USERNAME}/dotfiles/.gitconfig /home/${USERNAME}/.gitconfig &&\
+    ln -s /home/${USERNAME}/dotfiles/.config /home/${USERNAME}/.config &&\
+    chmod +x /home/${USERNAME}/dotfiles/scripts/gitconfig.local.sh &&\
+    /home/${USERNAME}/dotfiles/scripts/gitconfig.local.sh ${GITNAME} ${GITEMAIL}
 
 RUN nvim +:q
