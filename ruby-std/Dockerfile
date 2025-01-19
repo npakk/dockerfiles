@@ -153,8 +153,8 @@ RUN git clone https://github.com/npakk/dotfiles_for_docker.git dotfiles &&\
 RUN git clone https://github.com/rbenv/rbenv.git /home/${USERNAME}/.rbenv --depth 1 &&\
     git clone https://github.com/rbenv/ruby-build.git /home/${USERNAME}/.rbenv/plugins/ruby-build --depth 1 &&\
     echo 'eval "$(~/.rbenv/bin/rbenv init -)"' >> /home/${USERNAME}/.config/zsh/.zshrc &&\
-    /home/${USERNAME}/.rbenv/bin/rbenv install 3.3.6 &&\
-    /home/${USERNAME}/.rbenv/bin/rbenv global 3.3.6 &&\
+    /home/${USERNAME}/.rbenv/bin/rbenv install 3.4.1 &&\
+    /home/${USERNAME}/.rbenv/bin/rbenv global 3.4.1 &&\
     /home/${USERNAME}/.rbenv/shims/gem install rubocop rubocop-fjord solargraph
 
 RUN nvim +:q
